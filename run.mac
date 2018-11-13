@@ -1,0 +1,14 @@
+# Change the number of threads
+/run/numberOfThreads 2
+
+# Geometry
+
+/Geometry/HPGeDetector/enable
+/Geometry/HPGeDetector/position 0 0 0 cm
+/Geometry/HPGeDetector/rotateY -55 deg
+
+# Initialize
+/run/initialize
+
+# Run
+/run/beamOn 100000
