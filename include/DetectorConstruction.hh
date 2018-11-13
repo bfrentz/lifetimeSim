@@ -5,6 +5,7 @@
 #include "globals.hh"
 
 #include "HPGeDetector.hh"
+#include "TargetChamber.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -25,7 +26,7 @@ public:
 
 protected:
     HPGeDetector *m_hpgeDetector = nullptr;
-
+    TargetChamber *m_targetChamber = nullptr;
     G4LogicalVolume* m_scoringVolume = nullptr;
 };
 

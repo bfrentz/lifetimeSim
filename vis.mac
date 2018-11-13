@@ -2,9 +2,11 @@
 # ---------------
 
 /Geometry/HPGeDetector/enable
-/Geometry/HPGeDetector/rotateY -55 deg
+/Geometry/HPGeDetector/rotateY 55 deg
+/Geometry/HPGeDetector/position 20.81 0 14.62 cm
 
-/Geometry/HPGeDetector/position 0 0 0 mm
+/Geometry/TargetChamber/enable
+/Geometry/TargetChamber/position 0 0 0 cm
 
 # /Geometry/HPGeDetector/setDimension detectorDeadLayerFront 5 mm # large dead layer, for illustration
 

@@ -4,8 +4,8 @@
 # Geometry
 
 /Geometry/HPGeDetector/enable
-/Geometry/HPGeDetector/position 0 0 0 cm
-/Geometry/HPGeDetector/rotateY -55 deg
+/Geometry/HPGeDetector/position 20.81 0 14.62 cm
+/Geometry/HPGeDetector/rotateY 55 deg
 
 # Initialize
 /run/initialize

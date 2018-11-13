@@ -18,12 +18,14 @@ DetectorConstruction::DetectorConstruction()
     : G4VUserDetectorConstruction()
 {
     m_hpgeDetector = new HPGeDetector();
+    m_targetChamber = new TargetChamber();
 }
 
 
 DetectorConstruction::~DetectorConstruction()
 {
     delete m_hpgeDetector;
+    delete m_targetChamber;
 }
 
 
@@ -38,6 +40,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     m_hpgeDetector->SetMotherVolume(worldLog);
     m_hpgeDetector->Build();
+
+    m_targetChamber->SetMotherVolume(worldLog);
+    m_targetChamber->Build();
 
     m_scoringVolume = m_hpgeDetector->GetScoringVolume();
 

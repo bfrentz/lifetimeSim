@@ -176,6 +176,6 @@ void GeometryObject::CheckForUnusedDimensions() {
         for (const auto x : m_unusedDimensions) {
             G4cerr << " - " << x << G4endl;
         }
-        //throw runtime_error("Unused dimensions.");
+        throw runtime_error("Unused dimensions.");
     }
 }
