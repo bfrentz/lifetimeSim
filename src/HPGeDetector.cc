@@ -52,13 +52,17 @@ HPGeDetector::HPGeDetector() :
     GeometryObject("HPGeDetector")
 {
         // Outer casing dimensions
-        RegisterDimension("outerCasingDiameter", 108.0*mm);
-        RegisterDimension("outerCasingLength", 305.0*mm);
-        RegisterDimension("outerCasingFrontThickness", 1.0*mm);
-        RegisterDimension("outerCasingRadialThickness", 1.0*mm);
+        RegisterDimension("outerCasingDiameter", 101.0*mm);
+        RegisterDimension("outerCasingLength", 180.0*mm);
+        RegisterDimension("outerCasingFrontThickness", 1.6*mm);
+        RegisterDimension("outerCasingRadialThickness", 1.6*mm);
+
+        // Lead attenuator dimensions
+        RegisterDimension("outerLeadDiameter", GetDimension("outerCasingDiameter"));
+        RegisterDimension("outerLeadThickness", 1.5*mm);
 
         // Inner distance between outer casing and inner casing
-        RegisterDimension("innerDetectorPosition", 4.0*mm);
+        RegisterDimension("innerDetectorPosition", 3.0*mm);
 
         // thickness of mylar layer in front of detector
         RegisterDimension("mylarThickness", 0.03*mm);
@@ -67,7 +71,7 @@ HPGeDetector::HPGeDetector() :
         RegisterDimension("detectorWrappingDistance", 1e-3*mm);
 
         // Inner casing dimensions
-        RegisterDimension("innerCasingDiameter", 103.0*mm);
+        RegisterDimension("innerCasingDiameter", 88.0*mm);
         RegisterDimension("innerCasingFrontThickness", 0.03*mm);
         RegisterDimension("innerCasingRadialThickness", 0.76*mm);
         RegisterDimension("innerCasingBackThickness", 3.2*mm);
@@ -75,14 +79,14 @@ HPGeDetector::HPGeDetector() :
         RegisterDimension("innerCasingBackHoleDiameter", 22.0*mm);
 
         // Detector (crystal) dimensions
-        RegisterDimension("detectorDiameter", 84.6*mm);
-        RegisterDimension("detectorLength", 87.8*mm);
+        RegisterDimension("detectorDiameter", 86.0*mm);
+        RegisterDimension("detectorLength", 86.0*mm);
         RegisterDimension("detectorRoundedEdgeRadius", 10.0*mm);
-        RegisterDimension("detectorHoleDiameter", 9.7*mm);
-        RegisterDimension("detectorHoleDepth", 76.9*mm);
+        RegisterDimension("detectorHoleDiameter", 7.5*mm);
+        RegisterDimension("detectorHoleDepth", 56.9*mm);
         
         // Crystal dead layer information
-        RegisterDimension("detectorDeadLayerFront", 0.7*mm); // facing the target (excluding rounded front edges)
+        RegisterDimension("detectorDeadLayerFront", 0.5*mm); // facing the target (excluding rounded front edges)
         RegisterDimension("detectorDeadLayerBack", 0.1*mm); // pointing away from the target
         RegisterDimension("detectorDeadLayerOutside", 0.7*mm); // radially outside (including rounded front edges)
         RegisterDimension("detectorDeadLayerInside", 0.3*1e-3*mm); // inner contact
@@ -101,6 +105,7 @@ G4VPhysicalVolume* HPGeDetector::Construct() {
     auto matGe = nistManager->FindOrBuildMaterial("G4_Ge");
     //auto matLi  = nistManager->FindOrBuildMaterial("G4_Li"); // Lithium contact
     auto matMylar  = nistManager->FindOrBuildMaterial("G4_MYLAR");
+    auto matPb = nistManager->FindOrBuildMaterial("G4_Pb");
 
     // ----- General parameters for the detector
 
@@ -115,6 +120,9 @@ G4VPhysicalVolume* HPGeDetector::Construct() {
 
     // Outer casing is a hollow cylinder (open on one side) of Aluminum
     const auto outerCasingMaterial = matAl; //
+
+    // Lead shield in front of the detector face
+    const auto outerLeadMaterial = matPb;
 
     // At the front of the inner casing is a thin layer of Mylar
     // (even though it's not clear from the drawing, whether it's first Mylar or
@@ -157,7 +165,26 @@ G4VPhysicalVolume* HPGeDetector::Construct() {
 
         outerCasingLogical->SetVisAttributes(G4VisAttributes(G4Colour::Blue()));
 
-        PlaceVolume(outerCasingLogical, GetMotherVolume(), G4ThreeVector(0, 0, 0));
+        PlaceVolume(outerCasingLogical, GetMotherVolume(), G4ThreeVector(0, 0, GetDimension("outerLeadThickness")));
+    }
+
+    // Construct and place the lead layer for Low-energy gamma-ray attenuation
+    // using G4Tubs
+    {
+        auto outerLeadSolid = 
+            new G4Tubs(CreateSolidName("outerLead"),
+                       0.0,
+                       0.5*GetDimension("outerLeadDiameter"),
+                       0.5*GetDimension("outerLeadThickness"),
+                       phiMin,
+                       phiMax);
+
+        auto outerLeadLogical = 
+            new G4LogicalVolume(outerLeadSolid, outerLeadMaterial, CreateLogicalName("outerLead"));
+
+        outerLeadLogical->SetVisAttributes(G4VisAttributes(G4Colour::Gray()));
+
+        PlaceVolume(outerLeadLogical, GetMotherVolume(), G4ThreeVector(0, 0, 0.5*GetDimension("outerLeadThickness")));
     }
 
     // Construct and place inner casing and mylar disc
@@ -205,7 +232,7 @@ G4VPhysicalVolume* HPGeDetector::Construct() {
 
         PlaceVolumeInternal(mylarLogical, innerCasingLogical, G4ThreeVector(0,0,0.5*GetDimension("mylarThickness")));
 
-        PlaceVolume(innerCasingLogical, GetMotherVolume(), G4ThreeVector(0, 0, GetDimension("outerCasingFrontThickness") + GetDimension("innerDetectorPosition")));
+        PlaceVolume(innerCasingLogical, GetMotherVolume(), G4ThreeVector(0, 0, GetDimension("outerLeadThickness") + GetDimension("outerCasingFrontThickness") + GetDimension("innerDetectorPosition")));
 
         innerCasingLogical->SetVisAttributes(G4VisAttributes(G4Colour::Gray()));
     }
@@ -369,7 +396,7 @@ G4VPhysicalVolume* HPGeDetector::Construct() {
         PlaceVolumeInternal(activeDetectorLogical, fullDetectorLogical, G4ThreeVector(0,0,-0.5*GetDimension("detectorDeadLayerBack")));
 
         PlaceVolume(fullDetectorLogical, GetMotherVolume(),
-                    G4ThreeVector(0, 0, 0.5*fullBackCylinderHeight+GetDimension("detectorRoundedEdgeRadius")+GetDimension("outerCasingFrontThickness") + GetDimension("innerDetectorPosition") + GetDimension("innerCasingFrontThickness") + GetDimension("mylarThickness") + GetDimension("detectorWrappingDistance")));
+                    G4ThreeVector(0, 0, 0.5*fullBackCylinderHeight + GetDimension("detectorRoundedEdgeRadius") + GetDimension("outerCasingFrontThickness") + GetDimension("innerDetectorPosition") + GetDimension("innerCasingFrontThickness") + GetDimension("mylarThickness") + GetDimension("detectorWrappingDistance") + GetDimension("outerLeadThickness")));
     }
 
     return nullptr;
