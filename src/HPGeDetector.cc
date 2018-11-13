@@ -52,17 +52,17 @@ HPGeDetector::HPGeDetector() :
     GeometryObject("HPGeDetector")
 {
         // Outer casing dimensions
-        RegisterDimension("outerCasingDiameter", 101.0*mm);
-        RegisterDimension("outerCasingLength", 180.0*mm);
-        RegisterDimension("outerCasingFrontThickness", 1.6*mm);
-        RegisterDimension("outerCasingRadialThickness", 1.6*mm);
+        RegisterDimension("outerCasingDiameter", 108.0*mm);
+        RegisterDimension("outerCasingLength", 305.0*mm);
+        RegisterDimension("outerCasingFrontThickness", 1.0*mm);
+        RegisterDimension("outerCasingRadialThickness", 1.0*mm);
 
         // Lead attenuator dimensions
         RegisterDimension("outerLeadDiameter", GetDimension("outerCasingDiameter"));
         RegisterDimension("outerLeadThickness", 1.5*mm);
 
         // Inner distance between outer casing and inner casing
-        RegisterDimension("innerDetectorPosition", 3.0*mm);
+        RegisterDimension("innerDetectorPosition", 4.0*mm);
 
         // thickness of mylar layer in front of detector
         RegisterDimension("mylarThickness", 0.03*mm);
@@ -71,7 +71,7 @@ HPGeDetector::HPGeDetector() :
         RegisterDimension("detectorWrappingDistance", 1e-3*mm);
 
         // Inner casing dimensions
-        RegisterDimension("innerCasingDiameter", 88.0*mm);
+        RegisterDimension("innerCasingDiameter", 103.0*mm);
         RegisterDimension("innerCasingFrontThickness", 0.03*mm);
         RegisterDimension("innerCasingRadialThickness", 0.76*mm);
         RegisterDimension("innerCasingBackThickness", 3.2*mm);
@@ -79,14 +79,14 @@ HPGeDetector::HPGeDetector() :
         RegisterDimension("innerCasingBackHoleDiameter", 22.0*mm);
 
         // Detector (crystal) dimensions
-        RegisterDimension("detectorDiameter", 86.0*mm);
-        RegisterDimension("detectorLength", 86.0*mm);
+        RegisterDimension("detectorDiameter", 84.6*mm);
+        RegisterDimension("detectorLength", 87.8*mm);
         RegisterDimension("detectorRoundedEdgeRadius", 10.0*mm);
-        RegisterDimension("detectorHoleDiameter", 7.5*mm);
-        RegisterDimension("detectorHoleDepth", 56.9*mm);
+        RegisterDimension("detectorHoleDiameter", 9.7*mm);
+        RegisterDimension("detectorHoleDepth", 76.9*mm);
         
         // Crystal dead layer information
-        RegisterDimension("detectorDeadLayerFront", 0.5*mm); // facing the target (excluding rounded front edges)
+        RegisterDimension("detectorDeadLayerFront", 0.7*mm); // facing the target (excluding rounded front edges)
         RegisterDimension("detectorDeadLayerBack", 0.1*mm); // pointing away from the target
         RegisterDimension("detectorDeadLayerOutside", 0.7*mm); // radially outside (including rounded front edges)
         RegisterDimension("detectorDeadLayerInside", 0.3*1e-3*mm); // inner contact
