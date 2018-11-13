@@ -7,3 +7,13 @@
 # Office temp files
 ~$*
 
+# ROOT files
+*.root
+
+# Image files
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.eps
