@@ -41,7 +41,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-    delete particleDefinition;
+    //delete particleDefinition;
     delete m_particleGun;
 }
 
@@ -49,7 +49,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
     // Beginning of an event
-    G4ParticleDefinition* particle = m_ParticleGun->GetParticleDefinition();
+    G4ParticleDefinition* particle = m_particleGun->GetParticleDefinition();
     if (particle == G4ChargedGeantino::ChargedGeantino()) {
         //15O
         G4int Z = 8, A = 15;
