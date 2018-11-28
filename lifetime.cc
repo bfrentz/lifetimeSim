@@ -47,6 +47,7 @@
 
 #include "G4UImanager.hh"
 #include "G4PhysListFactory.hh"
+#include "lifetimePhysicsList.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -70,11 +71,11 @@ int main(int argc,char** argv)
 
     // Construct the default run manager
     //
-#ifdef G4MULTITHREADED
-    auto runManager = new G4MTRunManager;
-#else
-    auto runManager = new G4RunManager;
-#endif
+    #ifdef G4MULTITHREADED
+        auto runManager = new G4MTRunManager;
+    #else
+        auto runManager = new G4RunManager;
+    #endif
 
     // Set mandatory initialization classes
     //
@@ -82,11 +83,11 @@ int main(int argc,char** argv)
     runManager->SetUserInitialization(new DetectorConstruction());
 
     // Physics list
-    G4PhysListFactory	factory;
+    //G4PhysListFactory	factory;
+    //auto physicsList = factory.GetReferencePhysList("QGSP_BERT_LIV");
 
-    auto physicsList = factory.GetReferencePhysList("QGSP_BERT_LIV");
     //physicsList->SetVerboseLevel(1);
-    runManager->SetUserInitialization(physicsList);
+    runManager->SetUserInitialization(new lifetimePhysicsList);
 
     // User action initialization
     runManager->SetUserInitialization(new ActionInitialization());
