@@ -15,6 +15,7 @@ public:
     virtual ~PrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event* event);
+    
     const G4ParticleGun* GetParticleGun() const
     {
         return m_particleGun;

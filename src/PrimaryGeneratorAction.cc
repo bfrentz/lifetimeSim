@@ -23,23 +23,45 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     // default particle kinematic
     auto particleTable = G4ParticleTable::GetParticleTable();
 
-    auto particleDefinition = particleTable->FindParticle("gamma");
+    auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
 
     m_particleGun->SetParticleEnergy(1*MeV);
-    m_particleGun->SetParticlePosition(G4ThreeVector(0,0,0));
+    m_particleGun->SetParticleMomentumDirection(G4UniformRand());
+    m_particleGun->SetParticlePosition(G4ThreeVector(-1.25*cm/std::sqrt(2), 
+                                                    0, 
+                                                    -std::sqrt(2)*(1.25*cm/2 + 0.50*mm))); // Front and center of target
 }
 
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
+    delete particleDefinition;
     delete m_particleGun;
 }
 
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    m_particleGun->SetParticleMomentumDirection(G4RandomDirection());
+    // Beginning of an event
+    G4ParticleDefinition* particle = m_ParticleGun->GetParticleDefinition();
+    if (particle == G4ChargedGeantino::ChargedGeantino()) {
+        //15O
+        G4int Z = 8, A = 15;
+        G4double ionCharge   = 0.*eplus;
+        G4double excitEnergy = 6793.1*keV;
+
+        G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+        ion->SetPDGLifeTime(1e-15*second);
+        m_ParticleGun->SetParticleDefinition(ion);
+        m_ParticleGun->SetParticleCharge(ionCharge);
+  }
+
+
+    m_particleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, 1.0));
+    m_particleGun->SetParticlePosition(G4ThreeVector(-1.25*cm/std::sqrt(2), 
+                                                     0, 
+                                                     -std::sqrt(2)*(1.25*cm/2 + 0.50*mm))); // Front and center of target
     m_particleGun->GeneratePrimaryVertex(anEvent);
 }
 
