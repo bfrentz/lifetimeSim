@@ -19,15 +19,18 @@ public:
 
     virtual G4VPhysicalVolume* Construct();
 
-    G4LogicalVolume* GetScoringVolume() const
+    G4LogicalVolume* GetScoringVolume(size_t iHPGe) const
     {
-        return m_scoringVolume;
+        return m_scoringVolumes[iHPGe];
     }
 
+    size_t GetMaximumNumberOfHPGe() const {return m_nHPGe_max;}
+
 protected:
-    HPGeDetector *m_hpgeDetector = nullptr;
+    const size_t m_nHPGe_max = 5;
+    HPGeDetector **m_hpgeDetector = nullptr;
     TargetChamber *m_targetChamber = nullptr;
-    G4LogicalVolume* m_scoringVolume = nullptr;
+    G4LogicalVolume** m_scoringVolumes = nullptr;
 };
 
 #endif // #ifndef DetectorConstruction_hh

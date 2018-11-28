@@ -38,6 +38,7 @@ using CLHEP::deg;
 using CLHEP::pi;
 
 #include <string>
+  using std::to_string;
 #include <stdexcept>
     using std::runtime_error;
 
@@ -48,8 +49,9 @@ using CLHEP::pi;
 // The reference position (0,0,0) is the front center of the front cap.
 //
 
-HPGeDetector::HPGeDetector() :
-    GeometryObject("HPGeDetector")
+HPGeDetector::HPGeDetector(size_t detectorID) :
+    GeometryObject("HPGeDetector_" + to_string(detectorID)),
+    m_detectorID(detectorID)
 {
         // Outer casing dimensions
         RegisterDimension("outerCasingDiameter", 108.0*mm);

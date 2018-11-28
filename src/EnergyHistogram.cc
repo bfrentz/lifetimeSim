@@ -1,5 +1,7 @@
 #include "EnergyHistogram.hh"
 
+#include "globals.hh"
+
 #include "G4SystemOfUnits.hh"
 using CLHEP::keV;
 
@@ -17,7 +19,7 @@ EnergyHistogram::~EnergyHistogram()
 
 void EnergyHistogram::Reset()
 {
-    G4AutoLock lock();
+    G4AutoLock lock(&m_mutex);
     m_histogram = new double[m_nBins+2];
     for (int i = 0; i <= m_nBins+1; i++)
     {
@@ -27,7 +29,7 @@ void EnergyHistogram::Reset()
 
 void EnergyHistogram::Fill(const double energy)
 {
-    G4AutoLock lock();
+    G4AutoLock lock(&m_mutex);
     if (energy < m_Emin)
     {
         m_histogram[0] += 1;
@@ -40,6 +42,9 @@ void EnergyHistogram::Fill(const double energy)
     {
         m_histogram[int(m_nBins*(energy-m_Emin)/(m_Emax-m_Emin)) + 1] += 1;
     }
+
+    //if (energy != 0)
+    //    G4cout << energy / keV << "keV - bin " << int(m_nBins*(energy-m_Emin)/(m_Emax-m_Emin)) + 1 << G4endl;
 }
 
 void EnergyHistogram::Write(const string fileName) const

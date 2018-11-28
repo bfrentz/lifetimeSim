@@ -31,7 +31,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
 
-    m_particleGun->SetParticleEnergy(1*MeV);
+    m_particleGun->SetParticleEnergy(3.41*MeV);
     m_particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
     m_particleGun->SetParticlePosition(G4ThreeVector(-1.25*cm/std::sqrt(2), 
                                                     0, 
@@ -57,7 +57,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         G4double excitEnergy = 6793.1*keV;
 
         G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
-        ion->SetPDGLifeTime(1e-15*second);
+        ion->SetPDGLifeTime(2e-15*second);
         m_particleGun->SetParticleDefinition(ion);
         m_particleGun->SetParticleCharge(ionCharge);
   }

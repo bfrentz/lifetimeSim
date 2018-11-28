@@ -14,7 +14,8 @@ public:
     virtual void Build() const;
 
 private:
-    EnergyHistogram *m_energyHistogram = nullptr;
+	size_t m_maxNumberHPGe = 0;
+    EnergyHistogram **m_energyHistogram = nullptr;
 };
 
 #endif // #ifndef ActionInitialization_hh

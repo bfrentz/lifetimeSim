@@ -19,15 +19,18 @@ class G4VPrimitiveScorer;
 class HPGeDetector : public GeometryObject
 {
     public:
-        HPGeDetector();
+        HPGeDetector(size_t detectorID);
         ~HPGeDetector();
 
         G4VPhysicalVolume *Construct();
         void ConstructSDandField() {}
 
-        G4LogicalVolume *GetScoringVolume() {return m_scoringVolume;}
+        G4LogicalVolume *GetScoringVolume() {G4cout << "GetScoringVolume() " << m_scoringVolume << G4endl; return m_scoringVolume;}
+
+        size_t GetDetectorID() const {return m_detectorID;}
 
     private:
+        size_t m_detectorID;
         G4LogicalVolume *m_scoringVolume = nullptr;
 };
 

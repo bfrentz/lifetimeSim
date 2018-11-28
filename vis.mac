@@ -1,9 +1,16 @@
 # Define Geometry
 # ---------------
 
-/Geometry/HPGeDetector/enable
-/Geometry/HPGeDetector/rotateY 55 deg
-/Geometry/HPGeDetector/position 20.81 0 14.62 cm
+/Geometry/HPGeDetector_0/enable
+/Geometry/HPGeDetector_0/position 0 0 25 cm
+
+/Geometry/HPGeDetector_1/enable
+/Geometry/HPGeDetector_1/rotateY 55 deg
+/Geometry/HPGeDetector_1/position 20.81 0 14.62 cm
+
+/Geometry/HPGeDetector_2/enable
+/Geometry/HPGeDetector_2/rotateY 90 deg
+/Geometry/HPGeDetector_2/position 25 0 0 cm
 
 /Geometry/TargetChamber/enable
 /Geometry/TargetChamber/position 0 0 0 cm
@@ -45,7 +52,7 @@
 /vis/drawVolume
 
 # Specify view angle:
-/vis/viewer/set/viewpointVector -1 0 0
+/vis/viewer/set/viewpointVector 0 1 0
 /vis/viewer/set/lightsVector -1 0 0
 
 # Specify style (surface, wireframe, auxiliary edges,...)
