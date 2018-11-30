@@ -25,7 +25,12 @@ class TargetChamber : public GeometryObject
         G4VPhysicalVolume *Construct();
         void ConstructSDandField() {}
 
+        G4ThreeVector GetTargetSurfacePosition() const {return m_targetSurfacePosition;}
+        G4ThreeVector GetTargetSurfaceNormal() const {return m_targetSurfaceNormal;}
+
     private:
+    	G4ThreeVector m_targetSurfacePosition;
+    	G4ThreeVector m_targetSurfaceNormal;
 };
 
 #endif // HPGeDetector_hh

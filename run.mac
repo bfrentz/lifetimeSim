@@ -1,5 +1,6 @@
 # Change the number of threads
 /run/numberOfThreads 4
+#/control/cout/ignoreThreadsExcept 0
 
 # Geometry
 
@@ -13,6 +14,17 @@
 /Geometry/HPGeDetector_2/enable
 /Geometry/HPGeDetector_2/rotateY 90 deg
 /Geometry/HPGeDetector_2/position 25 0 0 cm
+
+/Geometry/HPGeDetector_3/enable
+/Geometry/HPGeDetector_3/rotateY 145 deg
+/Geometry/HPGeDetector_3/position 20.81 0 -14.62 cm
+
+/Geometry/HPGeDetector_4/enable
+/Geometry/HPGeDetector_4/rotateY -30 deg
+/Geometry/HPGeDetector_4/position -25 0 48 cm
+
+/Geometry/TargetChamber/enable
+/Geometry/TargetChamber/position 0 0 0 cm
 
 # Initialize
 /run/initialize

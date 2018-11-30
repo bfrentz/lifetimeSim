@@ -24,7 +24,7 @@ DetectorConstruction::DetectorConstruction()
     {
         m_hpgeDetector[iHPGe] = new HPGeDetector(iHPGe);
         m_scoringVolumes[iHPGe] = nullptr;
-    }    
+    }
     m_targetChamber = new TargetChamber();
 }
 

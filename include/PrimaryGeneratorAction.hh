@@ -23,6 +23,12 @@ public:
 
 private:
     G4ParticleGun* m_particleGun = nullptr;
+
+    G4ThreeVector m_position;
+    G4ThreeVector m_surfaceNormal, m_radiusVector1, m_radiusVector2;
+    G4double m_radius = 0;
+
+    const bool m_verbose = false;
 };
 
 #endif // #ifndef PrimaryGeneratorAction_hh

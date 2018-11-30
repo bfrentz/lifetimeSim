@@ -76,7 +76,7 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber"){
 	// Target dimensions
 	RegisterDimension("targetSideX", 1.5*cm);
 	RegisterDimension("targetSideY", 2.0*cm);
-	RegisterDimension("targetThickness", 0.1*um); // 100 nm
+	RegisterDimension("targetThickness", 0.1*cm); // 100 nm
 	
 	// Chamber cap dimensions
 	RegisterDimension("chamberCapDiameter", 8.5*cm);
@@ -101,7 +101,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	// ----- General angular parameters for the chamber volumes
 	G4RotationMatrix noRotation;
 	G4RotationMatrix endRotation;
-	endRotation.rotateY(45.0*deg);
+	//endRotation.rotateY(45.0*deg);
 	G4RotationMatrix backingRotation;
 	backingRotation.rotateZ(45.0*deg);
 	
@@ -208,7 +208,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		// Place
 		PlaceVolumeInternal(waterLogical, chamberCapLogical, G4ThreeVector(0, 0, -0.5*(GetDimension("chamberCapLength") - GetDimension("waterCoolingThickness"))));
 
-		PlaceVolume(chamberCapLogical, GetMotherVolume(), G4ThreeVector(-(0.5*GetDimension("chamberCapLength")/std::sqrt(2)), 0, -(0.5*GetDimension("chamberCapLength"))/std::sqrt(2)), endRotation);
+		PlaceVolume(chamberCapLogical, GetMotherVolume(), G4ThreeVector(0, 0, -(0.5*GetDimension("chamberCapLength"))), noRotation);
 	}
 
 	
@@ -222,14 +222,19 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 										  0.5*GetDimension("chamberEndLength"),
 										  phiMin, phiMax);
 
-		// 45degree end of chamber
-		auto chamberPipeSolid = new G4CutTubs(CreateSolidName("chamberPipe"),
+		// Target end of chamber
+		auto chamberPipeSolid = new G4Tubs(CreateSolidName("chamberPipe"),
 										   0.5*GetDimension("chamberPipeDiameter") - GetDimension("chamberPipeRadialThickness"),
 										   0.5*GetDimension("chamberPipeDiameter"),
 										   0.5*GetDimension("chamberPipeLength"),
-										   phiMin, phiMax,
-										   G4ThreeVector(),
-										   G4ThreeVector(1, 0, 1));
+										   phiMin, phiMax);
+
+		G4Transform3D transformChamberPipeAndEnd(noRotation, G4ThreeVector(0, 0, 0.5*(GetDimension("chamberEndLength") + GetDimension("chamberPipeLength"))));
+		
+		G4VSolid *chamberPipeAndEndSolid = new G4UnionSolid(CreateSolidName("PipeAndEnd"),
+															chamberPipeSolid,
+															chamberEndSolid,
+															transformChamberPipeAndEnd);
 
 		// Upstream connecting piece to make another union solid
 		G4double zSegments[3] = {0.0,
@@ -248,13 +253,9 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 											   phiMin, phiMax,
 											   3, zSegments, innerRadius, outerRadius);
 
-		G4Transform3D transformChamberPipeAndEnd(endRotation, G4ThreeVector(0, 0, 0.5*(GetDimension("chamberEndLength")*std::sqrt(2) + GetDimension("chamberPipeLength"))));
-		G4VSolid *chamberPipeAndEndSolid = new G4UnionSolid(CreateSolidName("PipeAndEnd"),
-															chamberPipeSolid,
-															chamberEndSolid,
-															transformChamberPipeAndEnd);
 
 		G4Transform3D transformChamberUpstream(G4RotationMatrix(), G4ThreeVector(0, 0, -(0.5*GetDimension("chamberPipeLength"))));
+
 		G4VSolid *chamberSolid = new G4UnionSolid(CreateSolidName("Chamber"),
 												  chamberPipeAndEndSolid,
 												  chamberUpstream,
@@ -264,9 +265,9 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 
 		chamberLogical->SetVisAttributes(brassVisAtt);
 
-		PlaceVolume(chamberLogical, GetMotherVolume(), G4ThreeVector(-(GetDimension("chamberCapLength")/std::sqrt(2)), 0, -(GetDimension("chamberCapLength")/std::sqrt(2) + GetDimension("chamberEndLength")*std::sqrt(2) + 0.5*GetDimension("chamberPipeLength") + 0.1*mm)), noRotation);
+		PlaceVolume(chamberLogical, GetMotherVolume(), G4ThreeVector(0, 0, -(GetDimension("chamberCapLength") + GetDimension("chamberEndLength") + 0.5*GetDimension("chamberPipeLength"))), noRotation);
 
-		/*
+	/*
 		auto vacuumSolid1 = new G4CutTubs(CreateSolidName("vacuum1"),
 										 0, (0.5*GetDimension("chamberPipeDiameter")-GetDimension("chamberPipeRadialThickness")),
 										 0.5*GetDimension("chamberPipeLength")+GetDimension("chamberEndLength")*std::sqrt(2), 
@@ -315,7 +316,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		auto vacuumLogical = new G4LogicalVolume(vacuumSolid, vacuumMaterial, CreateLogicalName("Vacuum"));
 
 		vacuumLogical->SetVisAttributes(vacuumVisAtt);
-		*/
+	*/
 
 		auto backingSolid1 = new G4Box(CreateSolidName("backing1"),
 									   GetDimension("backingSideLength")*0.5,
@@ -338,7 +339,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		backingLogical->SetVisAttributes(backingVisAtt);
 
 		//PlaceVolumeInternal(backingLogical, vacuumLogical, G4ThreeVector(0, 0, 0.5*GetDimension("chamberPipeLength")+std::sqrt(2)*(GetDimension("chamberEndLength")-0.5*GetDimension("backingThickness"))), endRotation);
-		PlaceVolume(backingLogical, GetMotherVolume(), G4ThreeVector(-GetDimension("chamberCapLength")/std::sqrt(2), 0, -std::sqrt(2)*(GetDimension("chamberCapLength")/2+0.5*GetDimension("backingThickness"))), endRotation);
+		PlaceVolume(backingLogical, GetMotherVolume(), G4ThreeVector(0, 0, -(GetDimension("chamberCapLength")+0.5*GetDimension("backingThickness"))), endRotation);
 
 		auto targetSolid = new G4Box(CreateSolidName("target"),
 									 0.5*GetDimension("targetSideX"),
@@ -351,7 +352,21 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 
 		//PlaceVolumeInternal(targetLogical, vacuumLogical, G4ThreeVector(0, 0, 0.5*GetDimension("chamberPipeLength")+std::sqrt(2)*(GetDimension("chamberEndLength")-GetDimension("backingThickness")-0.5*GetDimension("targetThickness"))), endRotation);
 
-		PlaceVolume(targetLogical, GetMotherVolume(), G4ThreeVector(-(GetDimension("chamberCapLength")+GetDimension("backingThickness"))/std::sqrt(2), 0, -std::sqrt(2)*((GetDimension("chamberCapLength")+GetDimension("backingThickness"))/2+0.5*GetDimension("targetThickness"))), endRotation);
+		G4ThreeVector targetPosition = G4ThreeVector(0, 0, -((GetDimension("chamberCapLength")+GetDimension("backingThickness"))+0.5*GetDimension("targetThickness")));
+
+		m_targetSurfaceNormal = G4ThreeVector(0, 0, 1);
+		m_targetSurfaceNormal = (*GetRotation())*(endRotation*m_targetSurfaceNormal);
+
+		G4cout << "(TN) Target normal vector: " << G4endl;
+		G4cout << "(TN) " << m_targetSurfaceNormal.x() << G4endl;
+		G4cout << "(TN) " << m_targetSurfaceNormal.y() << G4endl;
+		G4cout << "(TN) " << m_targetSurfaceNormal.z() << G4endl;
+		G4cout << G4endl;
+		
+
+		m_targetSurfacePosition = (*GetRotation())*targetPosition - m_targetSurfaceNormal*0.5*GetDimension("targetThickness");
+
+		PlaceVolume(targetLogical, GetMotherVolume(), targetPosition, endRotation);
 
 		//PlaceVolume(vacuumLogical, GetMotherVolume(), G4ThreeVector(-(GetDimension("chamberCapLength")/std::sqrt(2)), 0, -(GetDimension("chamberCapLength")/std::sqrt(2) + GetDimension("chamberEndLength")*std::sqrt(2) + 0.5*GetDimension("chamberPipeLength"))), noRotation);
 

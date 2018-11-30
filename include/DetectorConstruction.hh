@@ -26,6 +26,8 @@ public:
 
     size_t GetMaximumNumberOfHPGe() const {return m_nHPGe_max;}
 
+    const TargetChamber* GetTargetChamber() const {return m_targetChamber;}
+
 protected:
     const size_t m_nHPGe_max = 5;
     HPGeDetector **m_hpgeDetector = nullptr;
