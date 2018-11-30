@@ -364,7 +364,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		G4cout << G4endl;
 		
 
-		m_targetSurfacePosition = (*GetRotation())*targetPosition - m_targetSurfaceNormal*0.5*GetDimension("targetThickness");
+		m_targetSurfacePosition = (*GetRotation())*targetPosition + m_targetSurfaceNormal*0.5*GetDimension("targetThickness");
 
 		PlaceVolume(targetLogical, GetMotherVolume(), targetPosition, endRotation);
 
