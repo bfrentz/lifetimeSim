@@ -76,7 +76,7 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber"){
 	// Target dimensions
 	RegisterDimension("targetSideX", 1.5*cm);
 	RegisterDimension("targetSideY", 2.0*cm);
-	RegisterDimension("targetThickness", 0.1*cm); // 100 nm
+	RegisterDimension("targetThickness", 0.1*um); // 100 nm
 	
 	// Chamber cap dimensions
 	RegisterDimension("chamberCapDiameter", 8.5*cm);
