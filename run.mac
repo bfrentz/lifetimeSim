@@ -1,5 +1,5 @@
 # Change the number of threads
-/run/numberOfThreads 3
+/run/numberOfThreads 4
 #/control/cout/ignoreThreadsExcept 0
 
 # Geometry
