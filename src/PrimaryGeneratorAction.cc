@@ -34,7 +34,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
 
-    m_particleGun->SetParticleEnergy(0.5*MeV);
+    m_particleGun->SetParticleEnergy(0.1*MeV);
     m_particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
     m_particleGun->SetParticlePosition(G4ThreeVector()); 
 

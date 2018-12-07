@@ -126,8 +126,9 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	auto matC = nistManager->FindOrBuildMaterial("G4_C");
 	//auto matTa = nistManager->FindOrBuildMaterial("G4_Ta");
 	//auto matW = nistManager->FindOrBuildMaterial("G4_W");
-	auto matAu = nistManager->FindOrBuildMaterial("G4_Au");
-	//auto matEr = nistManager->FindOrBuildMaterial("G4_Er");
+	//auto matAu = nistManager->FindOrBuildMaterial("G4_Au");
+	auto matEr = nistManager->FindOrBuildMaterial("G4_Er");
+	//auto matMo = nistManager->FindOrBuildMaterial("G4_Mo");
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
 	//auto matVacuum = new G4Material("vacuum", 1.56e-13*g/cm3, 1);
 	//matVacuum->AddMaterial(matAir, 1.0);
@@ -152,7 +153,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	const auto chamberMaterial = matBrass;
 	
 	// Target backing is a thick tantalum metal
-	const auto backingMaterial = matAu;
+	const auto backingMaterial = matEr;
 	
 	// Target material is carbon foil
 	const auto targetMaterial = matC;
