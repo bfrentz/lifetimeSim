@@ -89,6 +89,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // Beginning of an event
     G4ParticleDefinition* particle = m_particleGun->GetParticleDefinition();
     if (particle == G4ChargedGeantino::ChargedGeantino()) {
+        G4cout << "Replacing charged geantino with ion." << G4endl;
+
         //15O
         G4int Z = 8, A = 15;
         G4double ionCharge   = 0.*eplus;
