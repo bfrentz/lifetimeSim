@@ -26,6 +26,8 @@
 /Geometry/TargetChamber/enable
 /Geometry/TargetChamber/position 0 0 0 cm
 
+/TargetChamber/setBackingMaterial G4_Mo
+
 # Initialize
 /run/initialize
 
