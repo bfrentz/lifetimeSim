@@ -32,14 +32,14 @@ class TargetChamber : public GeometryObject
         G4ThreeVector GetTargetSurfacePosition() const {return m_targetSurfacePosition;}
         G4ThreeVector GetTargetSurfaceNormal() const {return m_targetSurfaceNormal;}
 
-        //virtual void SetNewValue(G4UIcommand* command, G4String value);
+        virtual void SetNewValue(G4UIcommand* command, G4String value);
 
     private:
 
     	G4ThreeVector m_targetSurfacePosition;
     	G4ThreeVector m_targetSurfaceNormal;
-        G4String m_backingMaterial = "G4_Mo";
-        //G4UIcmdWithAString *m_cmdSetMaterial;
+        G4String m_backingMaterial = "";
+        G4UIcmdWithAString *m_cmdSetMaterial;
 };
 
 #endif // HPGeDetector_hh

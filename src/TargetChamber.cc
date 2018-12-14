@@ -35,6 +35,7 @@
 
 #include "CLHEP/Units/SystemOfUnits.h"
 	using CLHEP::g;
+	using CLHEP::nm;
 	using CLHEP::um;
 	using CLHEP::mm;
 	using CLHEP::cm;
@@ -94,21 +95,22 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber")
 	RegisterDimension("waterTransportDiameter", 4.75*mm);
 	RegisterDimension("waterTransportThickness", GetDimension("chamberCapDiameter")-1*mm); // So it doesn't extend past edge
 	
-	//m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
-	//m_cmdSetMaterial->SetGuidance("Set new material.");
-    //m_cmdSetMaterial->SetParameterName("Name of backing material (G4_Ta, for example).", false);
+	m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
+	m_cmdSetMaterial->SetGuidance("Set new material.");
+    m_cmdSetMaterial->SetParameterName("Name of backing material (G4_Ta, for example).", false);
     //m_cmdSetMaterial->SetToBeBroadcasted(false);
 }
 
 TargetChamber::~TargetChamber(){
-	//delete m_cmdSetMaterial;
+	delete m_cmdSetMaterial;
 }
 
-/*
+
 void TargetChamber::SetNewValue(G4UIcommand *cmd, G4String newValue)
 {
     G4cout << "(TC) TargetChamber::SetNewValue" << G4endl;
 
+    
     if (cmd == m_cmdSetMaterial)
     {
     	m_backingMaterial = newValue;
@@ -117,10 +119,10 @@ void TargetChamber::SetNewValue(G4UIcommand *cmd, G4String newValue)
     else
     {
     	G4cout << "(TC) Unknown command encountered in TC SetNewValue" << G4endl;
-        //G4cerr << "(TC) Unknown command encountered in TargetChamber SetNewValue!" << G4endl;
+        GeometryObject::SetNewValue(cmd, newValue);
     }
 }
-*/
+
 
 G4VPhysicalVolume* TargetChamber::Construct() {
     	
@@ -149,31 +151,19 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	auto matBrass = new G4Material("brass", 8.73*g/cm3, 2);
 	matBrass->AddMaterial(matCu, 0.63);
 	matBrass->AddMaterial(matZn, 0.37);
-	auto matC = nistManager->FindOrBuildMaterial("G4_C");
-	//auto matTa = nistManager->FindOrBuildMaterial("G4_Ta");
-	//auto matW = nistManager->FindOrBuildMaterial("G4_W");
-	//auto matAu = nistManager->FindOrBuildMaterial("G4_Au");
+	auto matTarget = nistManager->FindOrBuildMaterial("G4_N");
+
+	if (m_backingMaterial == "")
+	{
+		G4cerr << "No backing material has been specified." << G4endl;
+	}
+
 	auto matBacking = nistManager->FindOrBuildMaterial(m_backingMaterial);
 	//auto matBacking = nistManager->FindOrBuildMaterial("G4_Mo");
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
 	//auto matVacuum = new G4Material("vacuum", 1.56e-13*g/cm3, 1);
 	//matVacuum->AddMaterial(matAir, 1.0);
 	auto matWater = nistManager->FindOrBuildMaterial("G4_WATER");
-	
-	// Outer casing is a hollow cylinder (open on one side) of Aluminum
-	//const auto outerCasingMaterial = matAl; //
-	
-	// At the front of the inner casing is a thin layer of Mylar
-	// (even though it's not clear from the drawing, whether it's first Mylar or
-	// aluminum)
-	//const auto mylarMaterial = matMylar;
-	
-	// Inner casing is a hollow cylinder (with a hole on the back side) of Al
-	//const auto innerCasingMaterial = matAl;
-	
-	// The detector has a particular shape: a solid cylinder with a rounded
-	// front edge and a bore hole from the back
-	//const auto detectorMaterial = matGe;
 	
 	// Target chamber is made of brass, as is the cap piece
 	const auto chamberMaterial = matBrass;
@@ -182,13 +172,11 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	const auto backingMaterial = matBacking;
 	
 	// Target material is carbon foil
-	const auto targetMaterial = matC;
+	const auto targetMaterial = matTarget;
 	
 	// Cooling water and its transport line is made from water
 	const auto waterMaterial = matWater;
 	
-	// Inside of chamber we have vacuum
-	//const auto vacuumMaterial = matVacuum;
 	
 
 	// For visualization of materials
@@ -394,7 +382,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		G4cout << G4endl;
 		
 
-		m_targetSurfacePosition = (*GetRotation())*targetPosition + m_targetSurfaceNormal*0.5*GetDimension("targetThickness");
+		m_targetSurfacePosition = (*GetRotation())*targetPosition + m_targetSurfaceNormal*0.5*(GetDimension("targetThickness")+1*nm);
 
 		PlaceVolume(targetLogical, GetMotherVolume(), targetPosition, endRotation);
 
@@ -403,12 +391,9 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	}
 
 
-	// Could do vacuum as find intersection of vacuum with chamber, 
+	// Could do vacuum as find intersection of vacuum with chamber?
 	// then take that intersection as a piece to subtract from vacuum. 
-	// Place vacuum inside of chamber -> Boom done with vacuum
-
-	// Still need vacuum, target, backing
-	// Accurate vector location of detector
+	// Place vacuum inside of chamber -> Boom done with vacuum -> Later;
 
 
 	return nullptr;
