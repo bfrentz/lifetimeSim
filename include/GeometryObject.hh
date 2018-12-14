@@ -90,6 +90,8 @@ class GeometryObject : public G4VUserDetectorConstruction, public G4UImessenger 
         map<G4String, G4double> m_dimensions;
         set<G4String> m_unusedDimensions;
         G4UIcmdWithAString *m_cmdSetDimension;
+
+        //G4UIcmdWithAString *m_cmdSetMaterial;
 };
 
 #endif

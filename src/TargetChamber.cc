@@ -30,6 +30,9 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSEnergyDeposit.hh"
 
+#include "G4UImessenger.hh"
+#include "G4UIcmdWithAString.hh"
+
 #include "CLHEP/Units/SystemOfUnits.h"
 	using CLHEP::g;
 	using CLHEP::um;
@@ -51,7 +54,8 @@
 // The reference position (0,0,0) is the front edge of the chamber cap, just behind the target.
 //
 
-TargetChamber::TargetChamber() : GeometryObject("TargetChamber"){
+TargetChamber::TargetChamber() : GeometryObject("TargetChamber")
+{
 	// Chamber pipe dimensions
 	RegisterDimension("chamberPipeDiameter", 6.05*cm);
 	RegisterDimension("chamberPipeLength", 17.5*cm);
@@ -90,11 +94,33 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber"){
 	RegisterDimension("waterTransportDiameter", 4.75*mm);
 	RegisterDimension("waterTransportThickness", GetDimension("chamberCapDiameter")-1*mm); // So it doesn't extend past edge
 	
-	
+	//m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
+	//m_cmdSetMaterial->SetGuidance("Set new material.");
+    //m_cmdSetMaterial->SetParameterName("Name of backing material (G4_Ta, for example).", false);
+    //m_cmdSetMaterial->SetToBeBroadcasted(false);
 }
 
 TargetChamber::~TargetChamber(){
+	//delete m_cmdSetMaterial;
 }
+
+/*
+void TargetChamber::SetNewValue(G4UIcommand *cmd, G4String newValue)
+{
+    G4cout << "(TC) TargetChamber::SetNewValue" << G4endl;
+
+    if (cmd == m_cmdSetMaterial)
+    {
+    	m_backingMaterial = newValue;
+        G4cout << "(TC) Setting Backing Material to " << m_backingMaterial << "." << G4endl;
+    }
+    else
+    {
+    	G4cout << "(TC) Unknown command encountered in TC SetNewValue" << G4endl;
+        //G4cerr << "(TC) Unknown command encountered in TargetChamber SetNewValue!" << G4endl;
+    }
+}
+*/
 
 G4VPhysicalVolume* TargetChamber::Construct() {
     	
@@ -127,8 +153,8 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	//auto matTa = nistManager->FindOrBuildMaterial("G4_Ta");
 	//auto matW = nistManager->FindOrBuildMaterial("G4_W");
 	//auto matAu = nistManager->FindOrBuildMaterial("G4_Au");
-	auto matEr = nistManager->FindOrBuildMaterial("G4_Er");
-	//auto matMo = nistManager->FindOrBuildMaterial("G4_Mo");
+	auto matBacking = nistManager->FindOrBuildMaterial(m_backingMaterial);
+	//auto matBacking = nistManager->FindOrBuildMaterial("G4_Mo");
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
 	//auto matVacuum = new G4Material("vacuum", 1.56e-13*g/cm3, 1);
 	//matVacuum->AddMaterial(matAir, 1.0);
@@ -152,8 +178,8 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	// Target chamber is made of brass, as is the cap piece
 	const auto chamberMaterial = matBrass;
 	
-	// Target backing is a thick tantalum metal
-	const auto backingMaterial = matEr;
+	// Target backing is a thick user defined metal
+	const auto backingMaterial = matBacking;
 	
 	// Target material is carbon foil
 	const auto targetMaterial = matC;
@@ -387,5 +413,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 
 	return nullptr;
 }
+
+
 
 

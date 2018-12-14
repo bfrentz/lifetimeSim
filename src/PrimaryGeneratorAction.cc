@@ -97,7 +97,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         G4double excitEnergy = 6793.1*keV;
 
         G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
-        ion->SetPDGLifeTime(1e-15*second);
+        ion->SetPDGLifeTime(m_lifetime);
         m_particleGun->SetParticleDefinition(ion);
         m_particleGun->SetParticleCharge(ionCharge);
     }

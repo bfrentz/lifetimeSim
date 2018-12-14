@@ -27,6 +27,7 @@ GeometryObject::GeometryObject(G4String name) :
     m_cmdRotateY(new G4UIcmdWithADoubleAndUnit((m_cmdDirName + "rotateY").c_str(), static_cast<G4UImessenger*>(this))),
     m_cmdRotateZ(new G4UIcmdWithADoubleAndUnit((m_cmdDirName + "rotateZ").c_str(), static_cast<G4UImessenger*>(this))),
     m_cmdSetDimension(new G4UIcmdWithAString((m_cmdDirName + "setDimension").c_str(), static_cast<G4UImessenger*>(this)))
+    //m_cmdSetMaterial(new G4UIcmdWithAString((m_cmdDirName + "setMaterial").c_str(), static_cast<G4UImessenger*>(this)))
 {
     m_cmdDir->SetGuidance(("commands for " + m_name + " geometry.").c_str());
 
@@ -53,6 +54,12 @@ GeometryObject::GeometryObject(G4String name) :
     m_cmdSetDimension->SetGuidance("Set dimension, use e.g. \"/Geometry/TargetChamber55/setDimension beamSpotDiameter 0.5 mm\".");
     m_cmdSetDimension->SetParameterName("Name of dimension, number and unit - separated by spaces.", false);
     m_cmdSetDimension->SetToBeBroadcasted(false);
+
+    /*
+    m_cmdSetMaterial->SetGuidance("Set new material, use e.g. \"/Geometry/TargetChamber55/setMaterial backing Ta\".");
+    m_cmdSetMaterial->SetParameterName("Name of material as a string.", false);
+    m_cmdSetMaterial->SetToBeBroadcasted(false);
+    */
 }
 
 GeometryObject::~GeometryObject() {
@@ -62,6 +69,7 @@ GeometryObject::~GeometryObject() {
     delete m_cmdRotateX;
     delete m_cmdRotateY;
     delete m_cmdRotateZ;
+    //delete m_cmdSetMaterial;
 }
 
 void GeometryObject::Build() {
@@ -133,6 +141,12 @@ void GeometryObject::SetNewValue(G4UIcommand* command, G4String newValue)
         const G4double dimensionValue = G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(G4String(newValue.substr(newValue.find(" "), newValue.size()-newValue.find(" "))));
         SetDimension(dimensionName, dimensionValue);
     }
+    /*
+    else if (command == m_cmdSetMaterial){
+        //Get logical volume
+        //currentlogvol->SetMaterial(newValue);
+    }
+    */
     else
         G4cerr << "Unknown command in GeometryObject!" << G4endl;
 }
