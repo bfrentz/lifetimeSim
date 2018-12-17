@@ -32,6 +32,9 @@
 
 /run/initialize
 
+# Change beam energy
+/gun/energy 10 keV
+
 
 # Visualize
 # ---------

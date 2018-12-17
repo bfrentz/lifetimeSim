@@ -1,13 +1,18 @@
 import ROOT
+import sys
 
 ROOT.gROOT.SetBatch(1)
 
-plotName = "histogram.pdf"
+lifetime = sys.argv[1]
+energy = sys.argv[2]
+backing = sys.argv[3]
+plotName = "./output/histograms_" + lifetime + "_" + energy + "_" + backing 
 
 canvas = ROOT.TCanvas()
-canvas.Print(plotName + "[", "pdf")
+canvas.Print(plotName + ".pdf[")
 
-outFile = ROOT.TFile("histograms.root", "RECREATE")
+fileName = plotName + ".root"
+outFile = ROOT.TFile(fileName, "RECREATE")
 
 for iHPGe in range(0, 5):
 	with open("histogram_{0}.dat".format(iHPGe)) as inFile:
@@ -29,8 +34,8 @@ for iHPGe in range(0, 5):
 	histo.GetXaxis().SetRangeUser(6500, 7000)
 
 	ROOT.gPad.SetLogy(1)
-	canvas.Print(plotName, "pdf")
+	canvas.Print(plotName + ".pdf")
 
-canvas.Print(plotName + "]", "pdf")
+canvas.Print(plotName + ".pdf]")
 
 

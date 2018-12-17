@@ -26,10 +26,13 @@
 /Geometry/TargetChamber/enable
 /Geometry/TargetChamber/position 0 0 0 cm
 
-/TargetChamber/setBackingMaterial G4_Mo
+/TargetChamber/setBackingMaterial G4_Ta
 
 # Initialize
 /run/initialize
 
+# Beam energy
+/gun/energy 10000 keV
+
 # Run
-/run/beamOn 100000000
+/run/beamOn 10000
