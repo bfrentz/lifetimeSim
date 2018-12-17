@@ -1,3 +1,13 @@
+# Writes out Geant4 simulation data to root file and makes initial histogram plot of a user defined region.
+# Uses .dat files generated for each detector by the lifetime executable, so this must be run
+# after each different Geant4 simulation or data will be lost. Similarly, a user cannot have multiple instances of 
+# the lifetime executable running in the same directory, since the files will interfere.
+#
+# script is invoked with three additional arguments, lifetime, energy, and backing
+#
+# User should include units as one word in these arguments when passed at the command line. For example,
+# py plotHistogram.py 1fs 100keV Ta
+
 import ROOT
 import sys
 

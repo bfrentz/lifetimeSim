@@ -14,7 +14,7 @@ import sys
 energy = sys.argv[1]
 unit = sys.argv[2]
 
-change = '/gun/energy ' + energy + ' ' + unit + '\n\n'
+change = '/gun/energy ' + energy + ' ' + unit + '\n'
 
 with open("run.mac") as f:
 	lines = f.readlines()
