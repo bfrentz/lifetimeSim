@@ -47,6 +47,7 @@ set(SCRIPTS
   run.mac
   vis.mac
   plotHistogram.py  
+  energyChange.py
   )
 
 foreach(_script ${SCRIPTS})

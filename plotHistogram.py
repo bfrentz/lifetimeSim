@@ -31,7 +31,7 @@ for iHPGe in range(0, 5):
 
 	#histo.Rebin(10)
 	histo.Draw()
-	histo.GetXaxis().SetRangeUser(6500, 7000)
+	histo.GetXaxis().SetRangeUser(6400, 7200)
 
 	ROOT.gPad.SetLogy(1)
 	canvas.Print(plotName + ".pdf")

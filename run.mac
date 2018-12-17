@@ -34,5 +34,8 @@
 # Beam energy
 /gun/energy 10000 keV
 
+# Verbose tracking info for debugging
+#/tracking/verbose 3
+
 # Run
 /run/beamOn 10000
