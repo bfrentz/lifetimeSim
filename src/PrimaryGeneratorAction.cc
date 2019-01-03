@@ -111,8 +111,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     {
         nAttempts += 1;
 
-        tmp1 = (2*G4Random::G4UniformRand())-1;
-        tmp2 = (2*G4Random::G4UniformRand())-1;
+        tmp1 = 0; //(2*G4Random::G4UniformRand())-1;
+        tmp2 = 0; //(2*G4Random::G4UniformRand())-1;
 
         if (tmp1*tmp1 + tmp2*tmp2 < 1) {
             break;
