@@ -31,7 +31,7 @@ public:
 private:
     G4ParticleGun* m_particleGun = nullptr;
 
-    G4double m_lifetime = 1e-15*second;
+    G4double m_lifetime = 10e-15*second;
 
     G4ThreeVector m_position;
     G4ThreeVector m_surfaceNormal, m_radiusVector1, m_radiusVector2;
