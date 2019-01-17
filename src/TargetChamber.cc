@@ -94,18 +94,20 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber")
 	// Water (transport)
 	RegisterDimension("waterTransportDiameter", 4.75*mm);
 	RegisterDimension("waterTransportThickness", GetDimension("chamberCapDiameter")-1*mm); // So it doesn't extend past edge
+
+	m_backingMaterial = "G4_Au";
 	
-	m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
-	m_cmdSetMaterial->SetGuidance("Set new material.");
-    m_cmdSetMaterial->SetParameterName("Name of backing material (G4_Ta, for example).", false);
+	//m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
+	//m_cmdSetMaterial->SetGuidance("Set new material.");
+    //m_cmdSetMaterial->SetParameterName("Name of backing material (G4_Ta, for example).", false);
     //m_cmdSetMaterial->SetToBeBroadcasted(false);
 }
 
 TargetChamber::~TargetChamber(){
-	delete m_cmdSetMaterial;
+	//delete m_cmdSetMaterial;
 }
 
-
+/*
 void TargetChamber::SetNewValue(G4UIcommand *cmd, G4String newValue)
 {
     G4cout << "(TC) TargetChamber::SetNewValue" << G4endl;
@@ -114,15 +116,17 @@ void TargetChamber::SetNewValue(G4UIcommand *cmd, G4String newValue)
     if (cmd == m_cmdSetMaterial)
     {
     	m_backingMaterial = newValue;
+    	G4cout << "(TC) Received command " << m_cmdSetMaterial << "." << G4endl;
         G4cout << "(TC) Setting Backing Material to " << m_backingMaterial << "." << G4endl;
     }
     else
     {
-    	G4cout << "(TC) Unknown command encountered in TC SetNewValue" << G4endl;
+    	G4cout << "(TC) Unknown command encountered in TC SetNewValue." << G4endl;
+    	G4cout << "(TC) Unknown command is: " << m_cmdSetMaterial << "." << G4endl;
         GeometryObject::SetNewValue(cmd, newValue);
     }
 }
-
+*/
 
 G4VPhysicalVolume* TargetChamber::Construct() {
     	
@@ -153,13 +157,16 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	matBrass->AddMaterial(matZn, 0.37);
 	auto matTarget = nistManager->FindOrBuildMaterial("G4_N");
 
+	//Specify backing material
+	//auto matBacking;
 	if (m_backingMaterial == "")
 	{
-		G4cerr << "No backing material has been specified." << G4endl;
+		G4cerr << "(TC) No backing material has been specified." << G4endl;
 	}
 
 	auto matBacking = nistManager->FindOrBuildMaterial(m_backingMaterial);
-	//auto matBacking = nistManager->FindOrBuildMaterial("G4_Mo");
+	G4cout << "(TC) Set backing material to " << m_backingMaterial << "." << G4endl;
+
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
 	//auto matVacuum = new G4Material("vacuum", 1.56e-13*g/cm3, 1);
 	//matVacuum->AddMaterial(matAir, 1.0);

@@ -13,6 +13,7 @@
 #include "G4SystemOfUnits.hh"
 using CLHEP::MeV;
 using CLHEP::mm;
+using CLHEP::second;
 
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
@@ -30,6 +31,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
     // create name
     G4String particleName;
+
+    // create variable for lifetime
+    m_lifetime = 10e-15*second;
 
     auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
@@ -65,13 +69,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
     if (m_verbose)
     {
-        G4cout << "(PG) Source position (center of circle): " << G4endl;
-        G4cout << "(PG)  " << m_position.x()/mm << "mm" << G4endl;
-        G4cout << "(PG)  " << m_position.y()/mm << "mm" << G4endl;
-        G4cout << "(PG)  " << m_position.z()/mm << "mm" << G4endl;
-        G4cout << "(PG)" << G4endl;
-        G4cout << "(PG) Source radius: " << m_radius/mm << "mm" << G4endl;
-        G4cout << "(PG)" << G4endl;
+        G4cout << "(PGA) Source position (center of circle): " << G4endl;
+        G4cout << "(PGA)  " << m_position.x()/mm << "mm" << G4endl;
+        G4cout << "(PGA)  " << m_position.y()/mm << "mm" << G4endl;
+        G4cout << "(PGA)  " << m_position.z()/mm << "mm" << G4endl;
+        G4cout << "(PGA)" << G4endl;
+        G4cout << "(PGA) Source radius: " << m_radius/mm << "mm" << G4endl;
+        G4cout << "(PGA)" << G4endl;
     }
 
 }
@@ -89,7 +93,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // Beginning of an event
     G4ParticleDefinition* particle = m_particleGun->GetParticleDefinition();
     if (particle == G4ChargedGeantino::ChargedGeantino()) {
-        G4cout << "Replacing charged geantino with ion." << G4endl;
+        G4cout << "(PGA) Replacing charged geantino with ion." << G4endl;
 
         //15O
         G4int Z = 8, A = 15;
@@ -98,6 +102,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
         ion->SetPDGLifeTime(m_lifetime);
+        G4cout << "(PGA) Assigning particle lifetime to " << m_lifetime/second << "seconds." << G4endl;
         m_particleGun->SetParticleDefinition(ion);
         m_particleGun->SetParticleCharge(ionCharge);
     }
