@@ -95,7 +95,7 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber")
 	RegisterDimension("waterTransportDiameter", 4.75*mm);
 	RegisterDimension("waterTransportThickness", GetDimension("chamberCapDiameter")-1*mm); // So it doesn't extend past edge
 
-	m_backingMaterial = "G4_Air";
+	m_backingMaterial = "G4_AIR";
 	
 	//m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
 	//m_cmdSetMaterial->SetGuidance("Set new material.");
