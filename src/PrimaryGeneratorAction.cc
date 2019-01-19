@@ -33,7 +33,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     G4String particleName;
 
     // create variable for lifetime
-    m_lifetime = 10e-15*second;
+    m_lifetime = 5e-15*second;
 
     auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
