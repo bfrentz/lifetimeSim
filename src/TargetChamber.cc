@@ -95,7 +95,7 @@ TargetChamber::TargetChamber() : GeometryObject("TargetChamber")
 	RegisterDimension("waterTransportDiameter", 4.75*mm);
 	RegisterDimension("waterTransportThickness", GetDimension("chamberCapDiameter")-1*mm); // So it doesn't extend past edge
 
-	m_backingMaterial = "G4_AIR";
+	m_backingMaterial = "G4_Au";
 	
 	//m_cmdSetMaterial = new G4UIcmdWithAString("/TargetChamber/setBackingMaterial", this);
 	//m_cmdSetMaterial->SetGuidance("Set new material.");
@@ -164,7 +164,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		G4cerr << "(TC) No backing material has been specified." << G4endl;
 	}
 
-	auto matBacking = nistManager->FindOrBuildMaterial(m_backingMaterial);
+	auto matBacking = nistManager->FindOrBuildMaterial("G4_Au");
 	G4cout << "(TC) Set backing material to " << m_backingMaterial << "." << G4endl;
 
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
@@ -187,7 +187,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 	
 
 	// For visualization of materials
-	G4VisAttributes* brassVisAtt = new G4VisAttributes(G4Colour(0.71,0.651,0.259)); 
+	G4VisAttributes* brassVisAtt   = new G4VisAttributes(G4Colour(0.71,0.651,0.259)); 
 	G4VisAttributes* targetVisAtt = new G4VisAttributes(G4Colour(0.01, 0.99, 0.01));
 	G4VisAttributes* backingVisAtt = new G4VisAttributes(G4Colour(0.76,0.79,0.81));
 	G4VisAttributes* waterVisAtt = new G4VisAttributes(G4Colour(0.01,0.467,0.745)); 
@@ -227,6 +227,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 										   		transformWater);
 
 		auto waterLogical = new G4LogicalVolume(waterSolid, waterMaterial, CreateLogicalName("water"));
+
 		waterLogical->SetVisAttributes(waterVisAtt);
 
 
@@ -373,7 +374,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 
 		auto targetLogical = new G4LogicalVolume(targetSolid, targetMaterial, CreateLogicalName("target"));
 
-		targetLogical->SetVisAttributes(targetVisAtt);
+		targetLogical->SetVisAttributes(G4VisAttributes(G4Colour::Magenta()));
 
 		//PlaceVolumeInternal(targetLogical, vacuumLogical, G4ThreeVector(0, 0, 0.5*GetDimension("chamberPipeLength")+std::sqrt(2)*(GetDimension("chamberEndLength")-GetDimension("backingThickness")-0.5*GetDimension("targetThickness"))), endRotation);
 
@@ -389,7 +390,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		G4cout << G4endl;
 		
 
-		m_targetSurfacePosition = (*GetRotation())*targetPosition + m_targetSurfaceNormal*0.5*(GetDimension("targetThickness")+1*nm);
+		m_targetSurfacePosition = (*GetRotation())*targetPosition + m_targetSurfaceNormal*0.5*(GetDimension("targetThickness")+GetDimension("backingThickness"));
 
 		PlaceVolume(targetLogical, GetMotherVolume(), targetPosition, endRotation);
 

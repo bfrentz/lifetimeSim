@@ -33,7 +33,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     G4String particleName;
 
     // create variable for lifetime
-    m_lifetime = 5e-15*second;
+    m_lifetime = 100e-15*second;
 
     auto particleDefinition = particleTable->FindParticle(particleName="chargedgeantino");
     m_particleGun->SetParticleDefinition(particleDefinition);
@@ -123,6 +123,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             break;
         }
     }
+    
     G4ThreeVector thisPosition = m_position + m_radius*(m_radiusVector1*tmp1 + m_radiusVector2*tmp2);
 
     if (m_verbose)
