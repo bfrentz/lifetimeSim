@@ -164,7 +164,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 		G4cerr << "(TC) No backing material has been specified." << G4endl;
 	}
 
-	auto matBacking = nistManager->FindOrBuildMaterial("G4_Au");
+	auto matBacking = nistManager->FindOrBuildMaterial(m_backingMaterial);
 	G4cout << "(TC) Set backing material to " << m_backingMaterial << "." << G4endl;
 
 	//auto matAir = nistManager->FindOrBuildMaterial("G4_AIR");
@@ -188,7 +188,7 @@ G4VPhysicalVolume* TargetChamber::Construct() {
 
 	// For visualization of materials
 	G4VisAttributes* brassVisAtt   = new G4VisAttributes(G4Colour(0.71,0.651,0.259)); 
-	G4VisAttributes* targetVisAtt = new G4VisAttributes(G4Colour(0.01, 0.99, 0.01));
+	//G4VisAttributes* targetVisAtt = new G4VisAttributes(G4Colour(0.01, 0.99, 0.01));
 	G4VisAttributes* backingVisAtt = new G4VisAttributes(G4Colour(0.76,0.79,0.81));
 	G4VisAttributes* waterVisAtt = new G4VisAttributes(G4Colour(0.01,0.467,0.745)); 
 	//G4VisAttributes* vacuumVisAtt = new G4VisAttributes(G4Colour(0.49,0.56,0.98)); 
