@@ -33,6 +33,10 @@
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4SystemOfUnits.hh"
+using CLHEP::second; 
+
+#include "G4NuclideTable.hh" 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,6 +52,8 @@ lifetimePhysicsList::lifetimePhysicsList()
 
   // EM physics
   RegisterPhysics(new G4EmStandardPhysics());
+
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(6.9e-15*second);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

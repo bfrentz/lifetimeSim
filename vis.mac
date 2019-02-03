@@ -23,7 +23,7 @@
 /Geometry/TargetChamber/enable
 /Geometry/TargetChamber/position 0 0 0 cm
 
-/TargetChamber/setBackingMaterial G4_Mo
+#/TargetChamber/setBackingMaterial G4_Mo
 
 # /Geometry/HPGeDetector/setDimension detectorDeadLayerFront 5 mm # large dead layer, for illustration
 

@@ -26,7 +26,7 @@
 /Geometry/TargetChamber/enable
 /Geometry/TargetChamber/position 0 0 0 cm
 
-/TargetChamber/setBackingMaterial G4_Ta
+#/TargetChamber/setBackingMaterial G4_Ta
 
 # Initialize
 /run/initialize
@@ -38,4 +38,4 @@
 #/tracking/verbose 3
 
 # Run
-/run/beamOn 10000
+/run/beamOn 100000000
