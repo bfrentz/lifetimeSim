@@ -81,7 +81,8 @@ HPGeDetector::HPGeDetector(size_t detectorID) :
         RegisterDimension("innerCasingBackHoleDiameter", 22.0*mm);
 
         // Detector (crystal) dimensions
-        RegisterDimension("detectorDiameter", 84.6*mm);
+        //RegisterDimension("detectorDiameter", 84.6*mm);
+        RegisterDimension("detectorDiameter", 42.3*mm);
         RegisterDimension("detectorLength", 87.8*mm);
         RegisterDimension("detectorRoundedEdgeRadius", 10.0*mm);
         RegisterDimension("detectorHoleDiameter", 9.7*mm);
